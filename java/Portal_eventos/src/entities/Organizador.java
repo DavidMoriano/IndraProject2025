@@ -2,8 +2,8 @@ package entities;
 
 public class Organizador {
     private int id_organizadores;
-    private String nombre;
-    private String informacion_contacto;
+    private String nombre; //Posible nombre de usuario
+    private String informacion_contacto; //Posible email o usuario
 
     public Organizador() {
         super();

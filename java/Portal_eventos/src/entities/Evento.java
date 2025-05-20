@@ -4,7 +4,7 @@ public class Evento {
     private int id_evento;
     private String nombre;
     private String fecha;
-    private int duracion;
+    private int duracion; //horas
     private String estado;
     private int id_categoria;
     private int id_organizador;
@@ -78,11 +78,16 @@ public class Evento {
         this.id_ubicacion = id_ubicacion;
     }
 
-    @Override
+     @Override
     public String toString() {
-        return "Eventos [id_evento=" + id_evento + ", nombre=" + nombre + ", fecha=" + fecha + ", duracion=" + duracion
-                + ", estado=" + estado + ", id_categoria=" + id_categoria + ", id_organizador=" + id_organizador
-                + ", id_ubicacion=" + id_ubicacion + "]";
+        return String.format("%-10s %-50s %-12s %-15d %-10s %-12d %-15d %-12d", 
+                             this.id_evento, this.nombre, this.fecha, this.duracion, this.estado, id_categoria, 
+                             this.id_organizador, this.id_ubicacion);
+    }
+
+    public static String getHeader() {
+        return String.format("%-10s %-50s %-12s %-15s %-10s %-12s %-15s %-12s", 
+                             "Id", "Nombre del Evento", "Fecha", "Duración", "Estado", "ID Categoría", "ID Organizador", "ID Ubicación");
     }
 
 }

@@ -2,7 +2,9 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
+import entities.Evento;
 import entities.Usuario;
 import model.ModelDatabase;
 
@@ -23,11 +25,17 @@ public class MainController {
     }
 
     public String userRegister(Usuario user) {
+        Boolean validUser = modelDB.validUserName(user);
         Boolean valid = modelDB.validUser(user);
-        if (valid) {
+        if (valid && validUser) {
            return "Registrado correctamente";
         } else {
            return "Error al registrar";
         }
+    }
+
+    public List<Evento> showEventList() {
+        List<Evento> showList = modelDB.getShowList();
+        return showList;
     }
 }
