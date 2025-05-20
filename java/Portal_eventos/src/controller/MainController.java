@@ -1,22 +1,33 @@
 package controller;
 
+import java.io.IOException;
+import java.sql.SQLException;
+
+import entities.Usuario;
+import model.ModelDatabase;
+
 public class MainController {
+    private ModelDatabase modelDB;
 
-    public void login() {
-        System.out.println("Bienvenido usuario\n");
-
-        System.out.println("¿Qué quiere hacer?");
-
-        
+    public MainController() throws ClassNotFoundException, SQLException, IOException {
+        this.modelDB = new ModelDatabase();
     }
 
-    public void register(int option) {
-        System.out.println("Registrado correctamente\n");
-        if (option == 1) {
-            login();
+    public String login(Usuario user) {
+        Usuario loginUser = modelDB.validLoginUser(user);
+        if (loginUser.equals(user)) {
+           return "Bienvenido " + user.getNombre();
         } else {
-            System.out.println("Error al registrar");
+           return "Error al hacer login";
         }
     }
-    
+
+    public String userRegister(Usuario user) {
+        Boolean valid = modelDB.validUser(user);
+        if (valid) {
+           return "Registrado correctamente";
+        } else {
+           return "Error al registrar";
+        }
+    }
 }

@@ -1,12 +1,12 @@
 package entities;
 
-public class user {
-     private int id_usuario;
+public class Usuario {
+    private int id_usuario;
     private String nombre;
     private String email;
     private String password;
 
-    public user() {
+    public Usuario() {
         super();
     }
 
@@ -47,4 +47,5 @@ public class user {
         return "User [id_usuario=" + id_usuario + ", nombre=" + nombre + ", email=" + email + ", password=" + password
                 + "]";
     }
+
 }
