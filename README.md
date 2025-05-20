@@ -1,2 +1,0 @@
-# IndraProyect
-Práctica Indra
