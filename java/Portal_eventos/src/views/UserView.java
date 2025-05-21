@@ -42,7 +42,7 @@ public class UserView {
                     listEnrollment(user);
                     break;
                 case 4:
-
+                    showProfile(user);
                     break;
                 default:
                     break;
@@ -50,10 +50,17 @@ public class UserView {
         } while (option != 0);
     }
 
+    private void showProfile(Usuario user) {
+        TerminalUtils.out("PERFIL PERSONAL");
+        TerminalUtils.out("===============");
+        TerminalUtils.out("Nombre de usuario: " + user.getNombre());
+        TerminalUtils.out("Correo electrónico: " + user.getEmail());
+    }
+
     private void listEnrollment(Usuario user) {
-        List<Inscripcion> listInscripcions = userController.getAllInscription(user);
-        List<Evento> showList = mainController.showEventList(0);
-        if (listInscripcions == null) {
+        List<Inscripcion> listInscripcions = userController.getAllInscription(user.getId_usuario());
+        List<Evento> showList = mainController.showEventList(0, null);
+        if (listInscripcions.isEmpty()) {
             TerminalUtils.out("Lista de inscripciones vacía.");
         } else {
             TerminalUtils.out("Lista de inscripciones para el usuario " + user.getNombre());
@@ -69,8 +76,8 @@ public class UserView {
     }
 
     private String cancelEnrollment(Usuario user) {
-        List<Inscripcion> listInscripcions = userController.getAllInscription(user);
-        List<Evento> showList = mainController.showEventList(0);
+        List<Inscripcion> listInscripcions = userController.getAllInscription(user.getId_usuario());
+        List<Evento> showList = mainController.showEventList(0, null);
         TerminalUtils.out("Indica la inscripcion que desea borrar.");
         TerminalUtils.out(Inscripcion.getHeader());
         for (Inscripcion i : listInscripcions) {
@@ -86,6 +93,8 @@ public class UserView {
 
     private int menu() {
         int option = -1;
+        TerminalUtils.out("VISTA DE USUARIO");
+        TerminalUtils.out("================");
         TerminalUtils.out("0. Salir.");
         TerminalUtils.out("1. Apuntarse a eventos.");
         TerminalUtils.out("2. Cancelar la inscripción de un evento.");
@@ -106,7 +115,7 @@ public class UserView {
 
         TerminalUtils.out("Elige la categoria");
         int idCategoria = TerminalUtils.getInt();
-        List<Evento> showList = mainController.showEventList(idCategoria);
+        List<Evento> showList = mainController.showEventList(idCategoria, null);
 
         TerminalUtils.out("Lista de eventos");
         TerminalUtils.out(Evento.getHeader());

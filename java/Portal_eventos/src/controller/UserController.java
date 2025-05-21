@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import entities.Inscripcion;
-import entities.Usuario;
 import model.ModelDatabase;
 
 public class UserController {
@@ -24,9 +23,8 @@ public class UserController {
         }
     }
 
-    public List<Inscripcion> getAllInscription(Usuario user) {
-        System.out.println(user.getId_usuario());
-        List<Inscripcion> list = modelDB.getEnrollmentList(user.getId_usuario());
+    public List<Inscripcion> getAllInscription(int id) {
+        List<Inscripcion> list = modelDB.getEnrollmentList(id);
         return list;
     }
 

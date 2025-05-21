@@ -41,8 +41,8 @@ public class MainController {
         }
     }
 
-    public List<Evento> showEventList(int idCategoria) {
-        List<Evento> showList = modelDB.getShowList(idCategoria);
+    public List<Evento> showEventList(int idCategoria, Integer idOrganizador) {
+        List<Evento> showList = modelDB.getShowList(idCategoria, idOrganizador);
         return showList;
     }
 

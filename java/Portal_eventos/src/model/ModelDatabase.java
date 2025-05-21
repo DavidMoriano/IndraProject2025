@@ -2,7 +2,6 @@ package model;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -95,16 +94,24 @@ public class ModelDatabase {
 		}
 	}
 
-	public List<Evento> getShowList(int idCategoria) {
-		String query = "SELECT id_evento, nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion FROM eventos WHERE \n"
+	public List<Evento> getShowList(int idCategoria, Integer idOrganizador) {
+		String query = "SELECT id_evento, nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion FROM eventos WHERE "
 				+
-				"CASE WHEN ? = 0 then true else id_categoria = ? end";
+				"(? = 0 OR id_categoria = ?) AND (? IS NULL OR id_organizador = ?)";
 
 		try {
 			List<Evento> eventsList = new ArrayList<>();
 			PreparedStatement ps2 = connection.prepareStatement(query);
+
 			ps2.setInt(1, idCategoria);
 			ps2.setInt(2, idCategoria);
+			if (idOrganizador == null) {
+				ps2.setNull(3, java.sql.Types.INTEGER);
+				ps2.setNull(4, java.sql.Types.INTEGER);
+			} else {
+				ps2.setInt(3, idOrganizador);
+				ps2.setInt(4, idOrganizador);
+			}
 
 			ResultSet rs = ps2.executeQuery();
 
@@ -125,7 +132,6 @@ public class ModelDatabase {
 		} catch (Exception e) {
 			return null;
 		}
-
 	}
 
 	public List<Categoria> getCategoryList() {
@@ -148,7 +154,7 @@ public class ModelDatabase {
 	}
 
 	public Organizador validLoginOrg(String nombre) {
-		String query = "SELECT nombre, informacion_contacto FROM organizadores WHERE nombre like ?";
+		String query = "SELECT id_organizador, nombre, informacion_contacto FROM organizadores WHERE nombre like ?";
 
 		try {
 			PreparedStatement ps2 = connection.prepareStatement(query);
@@ -158,11 +164,13 @@ public class ModelDatabase {
 			ResultSet rs = ps2.executeQuery();
 
 			if (rs.next()) {
-				String nameDb = rs.getString(1);
-				String info = rs.getString(2);
+				int idDb = rs.getInt(1);
+				String nameDb = rs.getString(2);
+				String info = rs.getString(3);
 
 				Organizador org = new Organizador();
 
+				org.setId_organizadores(idDb);
 				org.setNombre(nameDb);
 				org.setInformacion_contacto(info);
 				return org;
@@ -249,15 +257,34 @@ public class ModelDatabase {
 
 	public Boolean cancelEnrollment(int idInsc) {
 		String query = "DELETE FROM inscripciones where id_inscripcion = ?";
-		 try {
+		try {
 			PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, idInsc);
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
-        } catch (SQLException e) {
-            System.out.println("Error al cancelar la inscripción: " + e.getMessage());
-            return false;
-        }
+			pstmt.setInt(1, idInsc);
+			int affectedRows = pstmt.executeUpdate();
+			return affectedRows > 0;
+		} catch (SQLException e) {
+			System.out.println("Error al cancelar la inscripción: " + e.getMessage());
+			return false;
+		}
+	}
+
+	public List<Usuario> getAllUsers() {
+		List<Usuario> userList = new ArrayList<>();
+		String query = "SELECT id_usuario, nombre FROM usuarios";
+		try {
+			PreparedStatement ps2 = connection.prepareStatement(query);
+			ResultSet rs = ps2.executeQuery();
+			while (rs.next()) {
+				Usuario u = new Usuario();
+				u.setId_usuario(rs.getInt(1));
+				u.setNombre(rs.getString(2));
+				userList.add(u);
+			}
+			return userList;
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 }

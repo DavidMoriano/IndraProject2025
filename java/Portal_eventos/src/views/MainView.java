@@ -14,10 +14,12 @@ import utils.TerminalUtils;
 public class MainView {
     private MainController mainController;
     private UserView userView;
+    private OrgView orgView;
 
     public MainView() throws ClassNotFoundException, SQLException, IOException {
         this.mainController = new MainController();
         this.userView = new UserView();
+        this.orgView = new OrgView();
     }
 
     public void start() {
@@ -66,6 +68,7 @@ public class MainView {
                     Organizador orgLogin = loginOrg();
                     if (orgLogin != null) {
                         TerminalUtils.out("Bienvenido organizador " + orgLogin.getNombre() + "\n");
+                        orgView.listToDo(orgLogin);
                     } else {
                         TerminalUtils.out("Error al realizar el login del organizador\n");
                     }
@@ -184,7 +187,7 @@ public class MainView {
 
         TerminalUtils.out("Elige la categoria");
         int idCategoria = TerminalUtils.getInt();
-        List<Evento> showList = mainController.showEventList(idCategoria);
+        List<Evento> showList = mainController.showEventList(idCategoria, null);
 
         TerminalUtils.out("Lista de eventos");
         TerminalUtils.out(Evento.getHeader());

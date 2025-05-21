@@ -21,6 +21,13 @@ Alter table inscripciones auto_increment = 1;
 INSERT INTO inscripciones (id_evento, id_usuario, fecha_inscripcion) values (2, 1, concat("2025-10-10", " ", curtime()));
 delete from inscripciones where id_inscripcion = 4;
 
+select usuarios.nombre, eventos.nombre from usuarios 
+	inner join inscripciones on usuarios.id_usuario = inscripciones.id_usuario
+    inner join eventos on inscripciones.id_evento = eventos.id_evento;
+
+SELECT id_usuario, nombre, email, '' as password FROM usuarios;
+
+SELECT nombre FROM usuario;
 
 INSERT INTO ubicaciones (tipo, direccion) VALUES ('Presencial', 'Av. de la Sostenibilidad 123, Madrid'),
 												 ('Presencial', 'Calle Verde 45, Sevilla'),

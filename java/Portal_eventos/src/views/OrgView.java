@@ -1,16 +1,27 @@
 package views;
 
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
+import controller.MainController;
 import controller.OrgController;
+import controller.UserController;
+import entities.Evento;
+import entities.Inscripcion;
 import entities.Organizador;
+import entities.Usuario;
 import utils.TerminalUtils;
 
 public class OrgView {
     private OrgController orgController;
-    private OrgView orgView;
+    private MainController mainController;
+    private UserController userController;
 
-    public OrgView() {
+    public OrgView() throws ClassNotFoundException, SQLException, IOException {
         this.orgController = new OrgController();
-        this.orgView = new OrgView();
+        this.mainController = new MainController();
+        this.userController = new UserController();
     }
 
     public void listToDo(Organizador org) {
@@ -23,10 +34,10 @@ public class OrgView {
                     TerminalUtils.out("Volviendo al inicio...");
                     break;
                 case 1:
-                    
+                    showListUser(org);
                     break;
                 case 2:
-
+                    newEvent(org);
                     break;
                 case 3:
 
@@ -38,6 +49,39 @@ public class OrgView {
                     break;
             }
         } while (option != 0);
+    }
+
+    private void newEvent(Organizador org) {
+        TerminalUtils.out("CREAR NUEVO EVENTO");
+        TerminalUtils.out("==================");
+    }
+
+    private void showListUser(Organizador org) {
+        List<Evento> showList = mainController.showEventList(0, org.getId_organizadores());
+        List<Usuario> userList = orgController.showUserList();
+
+        if (!userList.isEmpty()) {
+            for (Evento e : showList) {
+                if (e.getId_organizador() == org.getId_organizadores()) {
+                    for (Usuario u : userList) {
+                        List<Inscripcion> enrollmentList = userController.getAllInscription(u.getId_usuario());
+                        for (Inscripcion i : enrollmentList) {
+                            if (i.getId_evento() == e.getId_evento()) {
+                                TerminalUtils.out("Nombre del evento: " + e.getNombre());
+                                TerminalUtils.out("========================================================");
+                                TerminalUtils.out(String.format("%-10s %-20s", "Id", "Nombre usuario"));
+                                TerminalUtils.out(String.format("%-10s %-20s", u.getId_usuario(), u.getNombre()));
+                                TerminalUtils.out("\n");
+                            }
+                        }
+                    }
+
+                }
+            }
+        } else {
+            TerminalUtils.out("Lista de usuarios vacía");
+        }
+
     }
 
     private int menu() {
