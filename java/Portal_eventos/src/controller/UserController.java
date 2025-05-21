@@ -2,7 +2,10 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
+import entities.Inscripcion;
+import entities.Usuario;
 import model.ModelDatabase;
 
 public class UserController {
@@ -18,6 +21,21 @@ public class UserController {
             return "Inscripción terminada";
         } else {
             return "Error al realizar la inscripción.";
+        }
+    }
+
+    public List<Inscripcion> getAllInscription(Usuario user) {
+        System.out.println(user.getId_usuario());
+        List<Inscripcion> list = modelDB.getEnrollmentList(user.getId_usuario());
+        return list;
+    }
+
+    public String cancelEnrollment(int idInsc) {
+        Boolean valid = modelDB.cancelEnrollment(idInsc);
+        if (valid) {
+            return "Cancelación completada";
+        } else {
+            return "Error al cancelar la inscripción.";
         }
     }
 }

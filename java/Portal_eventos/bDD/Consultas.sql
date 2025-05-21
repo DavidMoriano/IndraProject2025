@@ -43,4 +43,6 @@ INSERT INTO eventos (nombre, fecha, duracion, estado, id_categoria, id_organizad
 ('Exposición de Productos Locales', '2025-07-20', 2, 'activo', 3, 1, 4),
 ('Taller de Construcción con Barro', '2025-07-25', 3, 'activo', 1, 1, 5);
 
+select id_inscripcion, eventos.nombre, fecha_inscripcion from inscripciones inner join eventos on inscripciones.id_evento = eventos.id_evento where inscripciones.id_usuario = 1;
 
+SELECT id_inscripcion, eventos.id_evento, fecha_inscripcion from inscripciones inner join eventos on inscripciones.id_evento = eventos.id_evento where inscripciones.id_usuario = 1;

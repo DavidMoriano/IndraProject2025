@@ -8,6 +8,7 @@ import controller.MainController;
 import controller.UserController;
 import entities.Categoria;
 import entities.Evento;
+import entities.Inscripcion;
 import entities.Usuario;
 import utils.TerminalUtils;
 
@@ -34,10 +35,11 @@ public class UserView {
                     TerminalUtils.out(enrollmentResult);
                     break;
                 case 2:
-
+                    String enrollmentCancel = cancelEnrollment(user);
+                    TerminalUtils.out(enrollmentCancel);
                     break;
                 case 3:
-
+                    listEnrollment(user);
                     break;
                 case 4:
 
@@ -48,12 +50,47 @@ public class UserView {
         } while (option != 0);
     }
 
+    private void listEnrollment(Usuario user) {
+        List<Inscripcion> listInscripcions = userController.getAllInscription(user);
+        List<Evento> showList = mainController.showEventList(0);
+        if (listInscripcions == null) {
+            TerminalUtils.out("Lista de inscripciones vacía.");
+        } else {
+            TerminalUtils.out("Lista de inscripciones para el usuario " + user.getNombre());
+            TerminalUtils.out(Inscripcion.getHeader());
+            for (Inscripcion i : listInscripcions) {
+                for (Evento e : showList) {
+                    if (i.getId_evento() == e.getId_evento())
+                        TerminalUtils.out(i.toString() + e.getNombre());
+                }
+            }
+
+        }
+    }
+
+    private String cancelEnrollment(Usuario user) {
+        List<Inscripcion> listInscripcions = userController.getAllInscription(user);
+        List<Evento> showList = mainController.showEventList(0);
+        TerminalUtils.out("Indica la inscripcion que desea borrar.");
+        TerminalUtils.out(Inscripcion.getHeader());
+        for (Inscripcion i : listInscripcions) {
+            for (Evento e : showList) {
+                if (i.getId_evento() == e.getId_evento())
+                    TerminalUtils.out(i.toString() + e.getNombre());
+            }
+        }
+        int idInsc = TerminalUtils.getInt();
+        String result = userController.cancelEnrollment(idInsc);
+        return result;
+    }
+
     private int menu() {
         int option = -1;
-        TerminalUtils.out("0. Salir");
-        TerminalUtils.out("1. Apuntarse a eventos");
-        TerminalUtils.out("2. Cancelar la inscripción de un evento");
-        TerminalUtils.out("3. Listar todos los eventos a los que estés inscrito");
+        TerminalUtils.out("0. Salir.");
+        TerminalUtils.out("1. Apuntarse a eventos.");
+        TerminalUtils.out("2. Cancelar la inscripción de un evento.");
+        TerminalUtils.out("3. Listar todos los eventos a los que estés inscrito.");
+        TerminalUtils.out("4. Mostrar datos personales.");
         TerminalUtils.out("Introduce la opción a escoger: ");
         option = TerminalUtils.getInt();
         return option;

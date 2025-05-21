@@ -2,6 +2,7 @@ package model;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,6 +12,7 @@ import java.util.List;
 import databaseConfig.DatabaseConnection;
 import entities.Categoria;
 import entities.Evento;
+import entities.Inscripcion;
 import entities.Organizador;
 import entities.Usuario;
 
@@ -223,6 +225,39 @@ public class ModelDatabase {
 			return false;
 		}
 		return true;
+	}
+
+	public List<Inscripcion> getEnrollmentList(int id_usuario) {
+		String query = "SELECT id_inscripcion, eventos.id_evento, fecha_inscripcion from inscripciones inner join eventos on inscripciones.id_evento = eventos.id_evento where inscripciones.id_usuario = ?";
+		List<Inscripcion> list = new ArrayList<>();
+		try {
+			PreparedStatement ps2 = connection.prepareStatement(query);
+			ps2.setInt(1, id_usuario);
+			ResultSet rs = ps2.executeQuery();
+			while (rs.next()) {
+				Inscripcion i = new Inscripcion();
+				i.setId_inscripcion(rs.getInt(1));
+				i.setId_evento(rs.getInt(2));
+				i.setFecha_inscripcion(rs.getString(3));
+				list.add(i);
+			}
+			return list;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public Boolean cancelEnrollment(int idInsc) {
+		String query = "DELETE FROM inscripciones where id_inscripcion = ?";
+		 try {
+			PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, idInsc);
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al cancelar la inscripción: " + e.getMessage());
+            return false;
+        }
 	}
 
 }

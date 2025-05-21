@@ -44,8 +44,11 @@ public class Inscripcion {
 
     @Override
     public String toString() {
-        return "Inscripciones [id_inscripcion=" + id_inscripcion + ", id_usuario=" + id_usuario + ", id_evento="
-                + id_evento + ", fecha_inscripcion=" + fecha_inscripcion + "]";
+        return String.format("%-20s %-20s %-50s ", this.id_inscripcion, this.id_evento, this.fecha_inscripcion);
+    }
+
+    public static String getHeader() {
+        return String.format("%-20s %-20s %-50s %-50s", "Id", "Id evento", "Fecha del evento y fecha de Inscripción", "Nombre del evento");
     }
 
 }
