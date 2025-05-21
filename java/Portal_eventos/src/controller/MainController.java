@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import entities.Categoria;
 import entities.Evento;
+import entities.Organizador;
 import entities.Usuario;
 import model.ModelDatabase;
 
@@ -15,27 +17,61 @@ public class MainController {
         this.modelDB = new ModelDatabase();
     }
 
-    public String login(Usuario user) {
+    public Usuario login(Usuario user) {
         Usuario loginUser = modelDB.validLoginUser(user);
-        if (loginUser.equals(user)) {
-           return "Bienvenido " + user.getNombre();
+        String passwordDb = loginUser.getPassword();
+        String passwordUser = user.getPassword();
+        if (passwordDb.equals(passwordUser)) {
+            return loginUser;
         } else {
-           return "Error al hacer login";
+            return null;
         }
     }
 
-    public String userRegister(Usuario user) {
-        Boolean validUser = modelDB.validUserName(user);
-        Boolean valid = modelDB.validUser(user);
-        if (valid && validUser) {
-           return "Registrado correctamente";
+    public Usuario userRegister(Usuario user) {
+        Boolean validUser = modelDB.validUserNameToRegister(user);
+          if (validUser) {
+            Boolean valid = modelDB.insertUser(user);
+            if (valid) {
+                return user;
+            } 
+            return null;
         } else {
-           return "Error al registrar";
+            return null;
         }
     }
 
-    public List<Evento> showEventList() {
-        List<Evento> showList = modelDB.getShowList();
+    public List<Evento> showEventList(int idCategoria) {
+        List<Evento> showList = modelDB.getShowList(idCategoria);
         return showList;
+    }
+
+    public List<Categoria> showCategoryList() {
+        List<Categoria> categoryList = modelDB.getCategoryList();
+        return categoryList;
+    }
+
+    public Organizador loginOrg(Organizador orgLogin) {
+        Organizador orgDB = modelDB.validLoginOrg(orgLogin.getNombre());
+        String infoDB = orgDB.getInformacion_contacto();
+        String infoOrgLogin = orgLogin.getInformacion_contacto();
+        if (infoDB.equals(infoOrgLogin)) {
+            return orgDB;
+        } else {
+            return null;
+        }
+    }
+
+    public Organizador orgRegister(Organizador org) {
+        Boolean validOrg = modelDB.validOrgNameToRegister(org);
+        if (validOrg) {
+            Boolean valid = modelDB.insertOrg(org);
+            if (valid) {
+                return org;
+            } 
+            return null;
+        } else {
+            return null;
+        }
     }
 }

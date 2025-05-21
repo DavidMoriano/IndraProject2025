@@ -8,9 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import databaseConfig.DatabaseConnection;
+import entities.Categoria;
 import entities.Evento;
+import entities.Organizador;
 import entities.Usuario;
 
 public class ModelDatabase {
@@ -22,7 +23,7 @@ public class ModelDatabase {
 		this.connection = DatabaseConnection.getConnection();
 	}
 
-	public Boolean validUser(Usuario user) {
+	public Boolean insertUser(Usuario user) {
 		try {
 			String query = "INSERT INTO usuarios (nombre, email, password) value (?, ?, ?)";
 			PreparedStatement ps1 = connection.prepareStatement(query);
@@ -40,7 +41,7 @@ public class ModelDatabase {
 	}
 
 	public Usuario validLoginUser(Usuario user) {
-		String query = "SELECT nombre, password, email FROM usuarios WHERE nombre like ?";
+		String query = "SELECT id_usuario, nombre, password, email FROM usuarios WHERE nombre like ?";
 
 		try {
 			PreparedStatement ps2 = connection.prepareStatement(query);
@@ -50,16 +51,18 @@ public class ModelDatabase {
 			ResultSet rs = ps2.executeQuery();
 
 			if (rs.next()) {
-				String nameDb = rs.getString(1);
-				String password = rs.getString(2);
-				String emailDb = rs.getString(3);
+				int idDb = rs.getInt(1);
+				String nameDb = rs.getString(2);
+				String password = rs.getString(3);
+				String emailDb = rs.getString(4);
 
 				Usuario userDB = new Usuario();
+				userDB.setId_usuario(idDb);
 				userDB.setNombre(nameDb);
 				userDB.setPassword(password);
 				userDB.setEmail(emailDb);
 
-				return user;
+				return userDB;
 			} else {
 				return null;
 			}
@@ -68,7 +71,7 @@ public class ModelDatabase {
 		}
 	}
 
-	public Boolean validUserName(Usuario user) {
+	public Boolean validUserNameToRegister(Usuario user) {
 		String query = "SELECT count(*) FROM usuarios where nombre like ?";
 
 		try {
@@ -90,12 +93,17 @@ public class ModelDatabase {
 		}
 	}
 
-    public List<Evento> getShowList() {
-		String query = "SELECT id_evento, nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion FROM eventos;";
+	public List<Evento> getShowList(int idCategoria) {
+		String query = "SELECT id_evento, nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion FROM eventos WHERE \n"
+				+
+				"CASE WHEN ? = 0 then true else id_categoria = ? end";
 
 		try {
-			List <Evento> eventsList = new ArrayList<>();	
+			List<Evento> eventsList = new ArrayList<>();
 			PreparedStatement ps2 = connection.prepareStatement(query);
+			ps2.setInt(1, idCategoria);
+			ps2.setInt(2, idCategoria);
+
 			ResultSet rs = ps2.executeQuery();
 
 			while (rs.next()) {
@@ -116,6 +124,105 @@ public class ModelDatabase {
 			return null;
 		}
 
-    }
+	}
+
+	public List<Categoria> getCategoryList() {
+		List<Categoria> categoryList = new ArrayList<>();
+		String query = "SELECT id_categoria, nombre FROM categorias";
+		try {
+			PreparedStatement ps2 = connection.prepareStatement(query);
+			ResultSet rs = ps2.executeQuery();
+			while (rs.next()) {
+				Categoria c = new Categoria();
+				c.setId_categoria(rs.getInt(1));
+				c.setNombre(rs.getString(2));
+
+				categoryList.add(c);
+			}
+			return categoryList;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public Organizador validLoginOrg(String nombre) {
+		String query = "SELECT nombre, informacion_contacto FROM organizadores WHERE nombre like ?";
+
+		try {
+			PreparedStatement ps2 = connection.prepareStatement(query);
+
+			ps2.setString(1, nombre);
+
+			ResultSet rs = ps2.executeQuery();
+
+			if (rs.next()) {
+				String nameDb = rs.getString(1);
+				String info = rs.getString(2);
+
+				Organizador org = new Organizador();
+
+				org.setNombre(nameDb);
+				org.setInformacion_contacto(info);
+				return org;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public Boolean insertOrg(Organizador org) {
+		try {
+			String query = "INSERT INTO organizadores (nombre, informacion_contacto) value (?, ?)";
+			PreparedStatement ps1 = connection.prepareStatement(query);
+
+			ps1.setString(1, org.getNombre());
+			ps1.setString(2, org.getInformacion_contacto());
+
+			ps1.executeUpdate();
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public Boolean validOrgNameToRegister(Organizador org) {
+		String query = "SELECT count(*) FROM organizadores where nombre like ?";
+
+		try {
+			PreparedStatement ps2 = connection.prepareStatement(query);
+			ps2.setString(1, org.getNombre());
+
+			ResultSet rs = ps2.executeQuery();
+			if (rs.next()) {
+				int count = rs.getInt(1);
+				if (count == 0) {
+					return true;
+				}
+			}
+			rs.close();
+			ps2.close();
+			return false;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public Boolean completeEnrollment(int idEvento, int id, String fechaEvento) {
+		try {
+			String query = "INSERT INTO inscripciones (id_evento, id_usuario, fecha_inscripcion) values (?, ?, concat(?, ' ', curtime()))";
+			PreparedStatement ps1 = connection.prepareStatement(query);
+
+			ps1.setInt(1, idEvento);
+			ps1.setInt(2, id);
+			ps1.setString(3, fechaEvento);
+			ps1.executeUpdate();
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 
 }

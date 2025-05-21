@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import controller.MainController;
+import entities.Categoria;
 import entities.Evento;
+import entities.Organizador;
 import entities.Usuario;
 import utils.TerminalUtils;
 
@@ -30,17 +32,43 @@ public class MainView {
                     break;
 
                 case 1:
-                    String resultResgister = register();
-                    TerminalUtils.out(resultResgister + "\n");
-                    userView.listToDo();
-                    break;
+                    Usuario userSignUp = registerUser();
+                    if (userSignUp != null) {
+                        TerminalUtils.out("Registro completado correctamente\n");
+                        break;
+                    } else {
+                        TerminalUtils.out("Error al registrar usuario\n");
+                        break;
+                    }
 
                 case 2:
-                    String resultLogin = login();
-                    TerminalUtils.out(resultLogin + "\n");
+                    Usuario userLogin = login();
+                    if (userLogin != null) {
+                        TerminalUtils.out("Bienvenido " + userLogin.getNombre() + "\n");
+                        userView.listToDo(userLogin);
+                    } else {
+                        TerminalUtils.out("Error al realizar el login del usuario\n");
+                    }
                     break;
                 case 3:
                     showAllEvents();
+                    break;
+                case 4:
+                    Organizador orgRegister = registerOrg();
+                    if (orgRegister != null) {
+                        TerminalUtils.out("Registro completado correctamente\n");
+                    } else {
+                        TerminalUtils.out("Error al registrar organizador\n");
+                        
+                    }
+                    break;
+                case 5:
+                    Organizador orgLogin = loginOrg();
+                    if (orgLogin != null) {
+                        TerminalUtils.out("Bienvenido organizador " + orgLogin.getNombre() + "\n");
+                    } else {
+                        TerminalUtils.out("Error al realizar el login del organizador\n");
+                    }
                     break;
                 default:
                     TerminalUtils.out("Error en la opción introducida\n");
@@ -50,20 +78,61 @@ public class MainView {
         } while (option != 0);
     }
 
-    private int menu() {
-        int option = -1;
-            TerminalUtils.out("Projecto Indra");
-            TerminalUtils.out("==============");
-            TerminalUtils.out("0. Salir");
-            TerminalUtils.out("1. Registrar");
-            TerminalUtils.out("2. Login");
-            TerminalUtils.out("3. Listar eventos por categorías");
-            TerminalUtils.out("Introduce la opción a escoger: ");
-            option = TerminalUtils.getInt();
-            return option;
+    private Organizador registerOrg() {
+        TerminalUtils.out("Registrar nuevo organizador");
+        TerminalUtils.out("==========================\n");
+        Organizador org = new Organizador();
+
+        System.out.print("Introduce el nombre de organizador: ");
+        String nombreOrg = TerminalUtils.getString();
+        org.setNombre(nombreOrg);
+
+        System.out.print("Introduce la informacion de contacto: ");
+        String info = TerminalUtils.getString();
+
+        System.out.print("Introduce de nuevo informacion de contacto: ");
+        String info1 = TerminalUtils.getString();
+
+        if (info.equals(info1)) {
+            org.setInformacion_contacto(info);
+        }
+        Organizador orgSignUp = mainController.orgRegister(org);
+        return orgSignUp;
     }
 
-    private String login() {
+    private Organizador loginOrg() {
+        TerminalUtils.out("Login");
+        TerminalUtils.out("=====\n");
+        Organizador orgLogin = new Organizador();
+
+        System.out.println("Introduce el nombre de administrador: ");
+        String loginName = TerminalUtils.getString();
+        orgLogin.setNombre(loginName);
+
+        System.out.println("Introduce una informacion de contacto: ");
+        String infoContacto = TerminalUtils.getString();
+        orgLogin.setInformacion_contacto(infoContacto);
+
+        Organizador orgToUse = mainController.loginOrg(orgLogin);
+        return orgToUse;
+    }
+
+    private int menu() {
+        int option = -1;
+        TerminalUtils.out("Projecto Indra");
+        TerminalUtils.out("==============");
+        TerminalUtils.out("0. Salir");
+        TerminalUtils.out("1. Registrar usuario");
+        TerminalUtils.out("2. Login usuario");
+        TerminalUtils.out("3. Listar eventos por categorías");
+        TerminalUtils.out("4. Registrar organizador");
+        TerminalUtils.out("5. Login organizador");
+        TerminalUtils.out("Introduce la opción a escoger: ");
+        option = TerminalUtils.getInt();
+        return option;
+    }
+
+    private Usuario login() {
         TerminalUtils.out("Login");
         TerminalUtils.out("=====\n");
         Usuario userLogin = new Usuario();
@@ -76,10 +145,11 @@ public class MainView {
         String loginPassword = TerminalUtils.getString();
         userLogin.setPassword(loginPassword);
 
-        return mainController.login(userLogin);
+        Usuario toUseLogin = mainController.login(userLogin);
+        return toUseLogin;
     }
 
-    private String register() {
+    private Usuario registerUser() {
         TerminalUtils.out("Registrar nuevo usuario");
         TerminalUtils.out("=======================\n");
         Usuario user = new Usuario();
@@ -99,12 +169,23 @@ public class MainView {
         String password1 = TerminalUtils.getString();
         if (password.equals(password1)) {
             user.setPassword(password);
-        } 
-        return mainController.userRegister(user);
+        }
+        Usuario userSignUp = mainController.userRegister(user);
+        return userSignUp;
     }
 
     private void showAllEvents() {
-        List<Evento> showList = mainController.showEventList();
+        List<Categoria> categoryList = mainController.showCategoryList();
+        TerminalUtils.out("Lista de categorias");
+        TerminalUtils.out(Categoria.getHeader());
+        for (Categoria c : categoryList) {
+            TerminalUtils.out(c.toString());
+        }
+
+        TerminalUtils.out("Elige la categoria");
+        int idCategoria = TerminalUtils.getInt();
+        List<Evento> showList = mainController.showEventList(idCategoria);
+
         TerminalUtils.out("Lista de eventos");
         TerminalUtils.out(Evento.getHeader());
         for (Evento e : showList) {
@@ -113,5 +194,3 @@ public class MainView {
     }
 
 }
-
-

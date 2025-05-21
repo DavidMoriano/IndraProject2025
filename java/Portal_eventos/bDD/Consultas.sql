@@ -2,13 +2,25 @@ use proyectoIndra;
 
 select * from usuarios;
 select * from eventos;
-select * from categorias;
+select * from categorias;		
 select * from ubicaciones;
 select * from organizadores;
+select * from inscripciones;
 
-select nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion from eventos;
+alter table organizadores auto_increment = 2;
+delete from organizadores where id_organizador = 2;
+
+PREPARE stmt FROM 'SELECT nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion FROM eventos WHERE CASE WHEN ? = 0 then true else id_categoria = ? end';
+SET @param1 = 0;
+	EXECUTE stmt USING @param1, @param1;
+DEALLOCATE PREPARE stmt;
 
 INSERT INTO organizadores (nombre, informacion_contacto) VALUES ('David', "David@gmail.com");
+
+Alter table inscripciones auto_increment = 1;
+INSERT INTO inscripciones (id_evento, id_usuario, fecha_inscripcion) values (2, 1, concat("2025-10-10", " ", curtime()));
+delete from inscripciones where id_inscripcion = 4;
+
 
 INSERT INTO ubicaciones (tipo, direccion) VALUES ('Presencial', 'Av. de la Sostenibilidad 123, Madrid'),
 												 ('Presencial', 'Calle Verde 45, Sevilla'),

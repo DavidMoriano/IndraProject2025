@@ -24,9 +24,13 @@ public class Categoria {
         this.nombre = nombre;
     }
 
+    public static String getHeader() {
+        return String.format("%-10s %-50s\n%-10s %-50s", "Id", "Nombre de la categoria", "0", "Todas las categorias");
+    }
+
     @Override
     public String toString() {
-        return "Categorias [id_categoria=" + id_categoria + ", nombre=" + nombre + "]";
+        return String.format("%-10s %-50s", this.id_categoria, this.nombre);
     }
 
 }
