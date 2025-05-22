@@ -52,4 +52,8 @@ INSERT INTO eventos (nombre, fecha, duracion, estado, id_categoria, id_organizad
 
 select id_inscripcion, eventos.nombre, fecha_inscripcion from inscripciones inner join eventos on inscripciones.id_evento = eventos.id_evento where inscripciones.id_usuario = 1;
 
+Select * from eventos;
+
 SELECT id_inscripcion, eventos.id_evento, fecha_inscripcion from inscripciones inner join eventos on inscripciones.id_evento = eventos.id_evento where inscripciones.id_usuario = 1;
+
+SELECT id_evento, nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion from eventos where id_organizador = 1;

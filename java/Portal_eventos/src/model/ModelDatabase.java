@@ -13,6 +13,7 @@ import entities.Categoria;
 import entities.Evento;
 import entities.Inscripcion;
 import entities.Organizador;
+import entities.Ubicacion;
 import entities.Usuario;
 
 public class ModelDatabase {
@@ -285,6 +286,80 @@ public class ModelDatabase {
 			return null;
 		}
 
+	}
+
+    public List<Evento> getEventsOrgs(Organizador org) {
+        List<Evento> list = new ArrayList<>();
+		String query = "SELECT id_evento, nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion from eventos where id_organizador = ?";
+
+		try {
+			PreparedStatement ps2 = connection.prepareStatement(query);
+			ps2.setInt(1, org.getId_organizadores());
+			ResultSet rs = ps2.executeQuery();
+
+			while (rs.next()) {
+				Evento e = new Evento();
+				e.setId_evento(rs.getInt(1));
+				e.setNombre(rs.getString(2));
+				e.setFecha(rs.getString(3));
+				e.setDuracion(rs.getInt(4));
+				e.setEstado(rs.getString(5));
+				e.setId_categoria(rs.getInt(6));
+				e.setId_organizador(rs.getInt(7));
+				e.setId_ubicacion(rs.getInt(8));
+				list.add(e);
+			}
+
+			return list;
+		} catch (Exception e) {
+			return null;
+		}
+
+    }
+
+    public List<Ubicacion> getLocationList() {
+        List<Ubicacion> list = new ArrayList<>();
+
+		String query = "SELECT id_ubicacion, tipo, direccion from ubicaciones";
+		try {
+			PreparedStatement ps2 = connection.prepareStatement(query);
+			ResultSet rs = ps2.executeQuery();
+
+			while (rs.next()) {
+				Ubicacion u = new Ubicacion();
+				u.setId_ubicacion(rs.getInt(1));
+				u.setTipo(rs.getString(2));
+				u.setDireccion(rs.getString(3));
+				list.add(u);
+			}
+
+			return list;
+		} catch (Exception e) {
+			return null;
+		}
+
+    }
+
+	public boolean createEvent(Evento even) {
+		String query = "INSERT INTO eventos (nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion) values (?, ?, ?, ?, ?, ?, ?)";
+
+		try {
+			PreparedStatement ps2 = connection.prepareStatement(query);
+
+			ps2.setString(1, even.getNombre());
+			ps2.setString(2, even.getFecha());
+			ps2.setInt(3, even.getDuracion());
+			ps2.setString(4, even.getEstado());
+			ps2.setInt(5, even.getId_categoria());
+			ps2.setInt(6, even.getId_organizador());
+			ps2.setInt(7, even.getId_ubicacion());
+
+			ps2.executeUpdate();
+
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 }

@@ -7,9 +7,11 @@ import java.util.List;
 import controller.MainController;
 import controller.OrgController;
 import controller.UserController;
+import entities.Categoria;
 import entities.Evento;
 import entities.Inscripcion;
 import entities.Organizador;
+import entities.Ubicacion;
 import entities.Usuario;
 import utils.TerminalUtils;
 
@@ -45,15 +47,79 @@ public class OrgView {
                 case 4:
 
                     break;
+                case 5:
+                    showCreatedEvents(org);
+                    break;
+                case 6:
+                    showPersonalData(org);
+                    break;
                 default:
                     break;
             }
         } while (option != 0);
     }
 
+    private void showPersonalData(Organizador org) {
+        TerminalUtils.out("PERFIL PERSONAL");
+        TerminalUtils.out("===============");
+        TerminalUtils.out("Id del organizador : " + org.getId_organizadores());
+        TerminalUtils.out("Nombre de organizador : " + org.getNombre());
+        TerminalUtils.out("Información de contacto : " + org.getInformacion_contacto());
+        TerminalUtils.out("\n");
+    }
+
+    private void showCreatedEvents(Organizador org) {
+        List<Evento> showList = orgController.getOrgList(org);
+        TerminalUtils.out("LISTA DE EVENTOS DEL ORGANIZADOR " + org.getNombre());
+        TerminalUtils.out("==========================================");
+        TerminalUtils.out(Evento.getHeader());
+        for(Evento e : showList) {
+            TerminalUtils.out(e.toString());
+        }
+        TerminalUtils.out("\n");
+    }
+
     private void newEvent(Organizador org) {
         TerminalUtils.out("CREAR NUEVO EVENTO");
-        TerminalUtils.out("==================");
+        TerminalUtils.out("==================");    
+        Evento e = new Evento();
+        List<Categoria> categoryList = mainController.showCategoryList();
+        TerminalUtils.out(Categoria.getHeader());
+        for (Categoria c : categoryList) {
+            TerminalUtils.out(c.toString());
+        }
+        TerminalUtils.out("Indica primero a que categoría pertenece el evento a crear: ");
+        int idCategoria = TerminalUtils.getInt();
+        e.setId_categoria(idCategoria);
+
+        List<Ubicacion> whereList = orgController.getLocations();
+        TerminalUtils.out(Ubicacion.getHeader());
+        for (Ubicacion u : whereList) {
+            TerminalUtils.out(u.toString());
+        }
+        TerminalUtils.out("Indica en que ubicación será el evento");
+        int idUbicacion = TerminalUtils.getInt();  
+        e.setId_ubicacion(idUbicacion);
+        
+        TerminalUtils.out("Indica el nombre del evento");
+        String nombre = TerminalUtils.getString();
+        e.setNombre(nombre);
+
+        TerminalUtils.out("Indica la duración del evento");
+        int duracion = TerminalUtils.getInt();
+        e.setDuracion(duracion);
+        e.setId_organizador(org.getId_organizadores());
+
+        TerminalUtils.out("Indica el estado en el que se encontrará el evento");
+        String estado = TerminalUtils.getString();
+        e.setEstado(estado);
+
+        TerminalUtils.out("Indica la fecha del evento (YYYY-MM-DD)");
+        String fecha = TerminalUtils.getString();
+        e.setFecha(fecha);
+
+        String result = orgController.createEvent(e);
+        TerminalUtils.out(result);
     }
 
     private void showListUser(Organizador org) {
@@ -93,6 +159,7 @@ public class OrgView {
         TerminalUtils.out("4. Modificar evento.");
         TerminalUtils.out("5. Mostrar eventos creados.");
         TerminalUtils.out("6. Mostrar datos personales.");
+        TerminalUtils.out("\n");
         TerminalUtils.out("Introduce la opción a escoger: ");
         option = TerminalUtils.getInt();
         return option;
