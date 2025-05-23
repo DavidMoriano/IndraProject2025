@@ -35,7 +35,7 @@ public class Ubicacion {
 
     @Override
     public String toString() {
-        return String.format("%-10s %-25s %-50", this.id_ubicacion, this.tipo, this.direccion);
+        return String.format("%-10s %-25s %-50s", this.id_ubicacion, this.tipo, this.direccion);
     }
 
     public static String getHeader() {

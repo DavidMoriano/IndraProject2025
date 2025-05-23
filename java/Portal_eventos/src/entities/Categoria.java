@@ -27,6 +27,10 @@ public class Categoria {
     public static String getHeader() {
         return String.format("%-10s %-50s\n%-10s %-50s", "Id", "Nombre de la categoria", "0", "Todas las categorias");
     }
+    
+    public static String getHeaderForEvents() {
+        return String.format("%-10s %-50s", "Id", "Nombre de la categoria");
+    }
 
     @Override
     public String toString() {

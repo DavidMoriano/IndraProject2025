@@ -288,8 +288,8 @@ public class ModelDatabase {
 
 	}
 
-    public List<Evento> getEventsOrgs(Organizador org) {
-        List<Evento> list = new ArrayList<>();
+	public List<Evento> getEventsOrgs(Organizador org) {
+		List<Evento> list = new ArrayList<>();
 		String query = "SELECT id_evento, nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion from eventos where id_organizador = ?";
 
 		try {
@@ -315,10 +315,10 @@ public class ModelDatabase {
 			return null;
 		}
 
-    }
+	}
 
-    public List<Ubicacion> getLocationList() {
-        List<Ubicacion> list = new ArrayList<>();
+	public List<Ubicacion> getLocationList() {
+		List<Ubicacion> list = new ArrayList<>();
 
 		String query = "SELECT id_ubicacion, tipo, direccion from ubicaciones";
 		try {
@@ -338,7 +338,7 @@ public class ModelDatabase {
 			return null;
 		}
 
-    }
+	}
 
 	public boolean createEvent(Evento even) {
 		String query = "INSERT INTO eventos (nombre, fecha, duracion, estado, id_categoria, id_organizador, id_ubicacion) values (?, ?, ?, ?, ?, ?, ?)";
@@ -360,6 +360,56 @@ public class ModelDatabase {
 			return false;
 		}
 		return true;
+	}
+
+	public boolean showCancel(int idEvento) {
+		String query = "UPDATE eventos SET estado = 'cancelado' WHERE id_evento = ?";
+		try (PreparedStatement ps2 = connection.prepareStatement(query)) {
+			ps2.setInt(1, idEvento);
+			int rowsUpdated = ps2.executeUpdate();
+			return rowsUpdated > 0;
+		} catch (SQLException e) {
+			return false;
+		}
+	}
+
+	public boolean editEvent(Evento eToEdit) {
+		String query = "UPDATE eventos SET nombre = ?, fecha = ?, duracion = ?, id_categoria = ?, id_ubicacion = ? WHERE id_evento = ?";
+
+		try {
+			PreparedStatement ps2 = connection.prepareStatement(query);
+			ps2.setString(1, eToEdit.getNombre());
+			ps2.setString(2, eToEdit.getFecha());
+			ps2.setInt(3, eToEdit.getDuracion());
+			ps2.setInt(4, eToEdit.getId_categoria());
+			ps2.setInt(5, eToEdit.getId_ubicacion());
+			ps2.setInt(6, eToEdit.getId_evento());
+
+			ps2.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean addUbi(Ubicacion uToEdit) {
+		String query2 = "INSERT INTO ubicaciones (tipo, direccion) VALUES (?, ?)";
+		String tipo = uToEdit.getTipo();
+		try {
+			PreparedStatement ps3 = connection.prepareStatement(query2);
+			ps3.setString(1, uToEdit.getTipo());
+			if (tipo.equals("presencial")) {
+				ps3.setString(2, uToEdit.getDireccion());
+			} else {
+				ps3.setString(2, "");
+			}
+			ps3.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

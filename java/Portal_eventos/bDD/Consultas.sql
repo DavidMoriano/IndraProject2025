@@ -27,7 +27,7 @@ select usuarios.nombre, eventos.nombre from usuarios
 
 SELECT id_usuario, nombre, email, '' as password FROM usuarios;
 
-SELECT nombre FROM usuario;
+SELECT * FROM eventos;
 
 INSERT INTO ubicaciones (tipo, direccion) VALUES ('Presencial', 'Av. de la Sostenibilidad 123, Madrid'),
 												 ('Presencial', 'Calle Verde 45, Sevilla'),
@@ -53,6 +53,16 @@ INSERT INTO eventos (nombre, fecha, duracion, estado, id_categoria, id_organizad
 select id_inscripcion, eventos.nombre, fecha_inscripcion from inscripciones inner join eventos on inscripciones.id_evento = eventos.id_evento where inscripciones.id_usuario = 1;
 
 Select * from eventos;
+
+select * from ubicaciones;
+
+select id_categoria, nombre from categorias;
+
+SELECT id_ubicacion, tipo, direccion from ubicaciones;
+
+select * from eventos;
+
+UPDATE eventos SET estado = 'cancelado' WHERE id_evento = 12;
 
 SELECT id_inscripcion, eventos.id_evento, fecha_inscripcion from inscripciones inner join eventos on inscripciones.id_evento = eventos.id_evento where inscripciones.id_usuario = 1;
 
