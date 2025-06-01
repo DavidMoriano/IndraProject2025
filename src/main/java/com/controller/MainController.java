@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.SecurePassword.HassPassword;
 import com.entities.Categoria;
 import com.entities.Evento;
 import com.entities.Organizador;
@@ -15,13 +16,12 @@ public class MainController {
 
     public MainController() throws ClassNotFoundException, SQLException, IOException {
         this.modelDB = new ModelDatabase();
+
     }
 
     public Usuario login(Usuario user) {
         Usuario loginUser = modelDB.validLoginUser(user);
-        String passwordDb = loginUser.getPassword();
-        String passwordUser = user.getPassword();
-        if (passwordDb.equals(passwordUser)) {
+        if (HassPassword.checkPassword(user.getPassword(), loginUser.getPassword())) {
             return loginUser;
         } else {
             return null;

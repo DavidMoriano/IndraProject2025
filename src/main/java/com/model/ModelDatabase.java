@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.SecurePassword.HassPassword;
 import com.databaseConfig.DatabaseConnection;
 import com.entities.Categoria;
 import com.entities.Evento;
@@ -32,7 +33,7 @@ public class ModelDatabase {
 
 			ps1.setString(1, user.getNombre());
 			ps1.setString(2, user.getEmail());
-			ps1.setString(3, user.getPassword());
+			ps1.setString(3, HassPassword.hashPassword(user.getPassword()));
 
 			ps1.executeUpdate();
 		} catch (Exception e) {

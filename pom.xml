@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,6 +23,12 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>8.0.33</version>
         </dependency>
+        <!-- JBCrypt -->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
     </dependencies>
 
     <!-- Repositorios -->
@@ -37,7 +42,7 @@
     <!-- Plugins -->
     <build>
         <plugins>
-            <!-- Plugin de compilador para Java 8 -->
+            <!-- Plugin de compilador -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -48,23 +53,15 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin para ejecutar el proyecto desde Maven -->
+            <!-- Plugin para ejecutar el programa -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>3.1.0</version>
                 <configuration>
-                    <mainClass>proyect.Main</mainClass>
+                    <mainClass>com.miempresa.Main</mainClass> <!-- Cambia esto al nombre completo de tu clase con main -->
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
 </project>

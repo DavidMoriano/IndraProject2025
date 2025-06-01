@@ -10,13 +10,6 @@
         },
         {
           "type": "java",
-          "name": "Main",
-          "request": "launch",
-          "mainClass": "com.miempresa.Main",
-          "projectName": "mi-proyecto"
-        },
-        {
-          "type": "java",
           "name": "Ejecutar IndraProyect",
           "request": "launch",
           "mainClass": "Main",
