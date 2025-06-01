@@ -3,17 +3,17 @@
 Este es el proyecto propuesto para realizar durante las prácticas en Indra
 
 ### Partes del proyecto 
-1. Sistemas informáticos
+1. Sistemas informáticos (doc)
   - Instalación de un sistema operativo Windows 10 Pro.
-2. Bases de Datos.
+2. Bases de Datos. (sql)
   - Creación de tablas y su respectivo diagrama Entidad-Relación.
-3. Programación.
+3. Programación. (src)
   - Mínimo propuesto : Objetos planos
   - Intento realizado : Juntar java con bases de datos:
     - Utilización de la librería 'mysqlConector'
     - Una funcionalidad a través de la arquitectura MVC
     - Autenticación de usuarios utilizando encriptacion de contraseñas con 'JBcrypt'
-4. Lenguajes de programación
+4. Lenguajes de programación (html)
   - 3 páginas webs interrelacionadas
   - Utilización de HTML, CSS y JavaScript
 5. Utilización de GitHub.
