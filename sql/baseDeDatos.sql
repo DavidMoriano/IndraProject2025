@@ -21,7 +21,7 @@ CREATE TABLE organizadores (
 
 CREATE TABLE ubicaciones (
     id_ubicacion INT PRIMARY KEY AUTO_INCREMENT,
-    tipo ENUM('interior', 'exterior'),
+    tipo ENUM('presencial', 'online'),
     direccion VARCHAR(255)
 );
 
