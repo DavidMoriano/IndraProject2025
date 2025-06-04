@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # IndraProject2025
 ## Práctica Indra
 Este es el proyecto propuesto para realizar durante las prácticas en Indra. A continuación se describen las diferentes partes que lo componen y su organización.
@@ -20,8 +19,4 @@ Este es el proyecto propuesto para realizar durante las prácticas en Indra. A c
 5. Utilización de GitHub.
   - Creación del repositorio y su respectiva rama.
   - Creación de la rama 'dev' donde se subirá el proyecto terminado
-  - Utilización de las distintas ramas para cada asignatura, para un posterior merge a la rama 'dev'
-=======
-# Rama de desarrollo
-Aquí he juntado las distintas partes del proyecto para poder visualizarlas de manera conjunta
->>>>>>> dev
+  - Utilización de las distintas ramas para cada asignatura, para un posterior merge a la rama 'dev' y luego hacia el main una vez terminado el proyecto
