@@ -1,0 +1,20 @@
+     {
+       "version": "0.2.0",
+       "configurations": [
+        {
+          "type": "java",
+          "name": "Main",
+          "request": "launch",
+          "mainClass": "com.proyect.Main",
+          "projectName": "mi-proyecto"
+        },
+        {
+          "type": "java",
+          "name": "Ejecutar IndraProyect",
+          "request": "launch",
+          "mainClass": "Main",
+          "projectName": "IndraProyect"
+        }
+      ]
+     }
+     
